@@ -14,19 +14,25 @@
         </div>
         <div class="grid grid-cols-2 h-full">
           <div>
-            <div class="max-h-screen h-full relative overflow-hidden aspect-933/1440 ml-auto">
-              <div class="overflow-hidden h-full w-full">
-                <img src="./src/assets/BEZ08140-HDR.webp" class="object-cover object-center h-full min-h-full w-full" alt="Image 1" loading="lazy" data-scale-scroll data-scale-min="0.4" data-scale-max="2"/>
+            <div class="max-w-[48.6vw] max-h-screen h-full relative overflow-hidden aspect-933/1440 ml-auto">
+              <div class="h-full w-full overflow-hidden">
+                <div class="absolute inset-0 w-full h-full" data-hover-distort data-hover-to="./src/assets/BEZ08140-HDR--before.webp">
+                  <img src="./src/assets/BEZ08140-HDR.webp" class="object-cover object-center h-full min-h-full w-full" alt="Image 1" loading="eager" fetchpriority="high" data-scale-scroll data-scale-min="0.4" data-scale-max="2"/>
+                </div>
               </div>
             </div>
           </div>
           <div class="self-center">
-            <div class="aspect-square max-w-100 mx-auto overflow-hidden">
-              <img src="./src/assets/BEZ08152-HDR.webp" class="object-cover object-center min-h-full h-full w-full" alt="Image 2" loading="lazy" data-scale-scroll data-scale-max="1.5"/>
+            <div class="aspect-square max-w-100 mx-auto overflow-hidden relative">
+              <div class="h-full w-full overflow-hidden">
+                <div class="absolute inset-0 w-full h-full" data-hover-distort data-hover-to="./src/assets/BEZ08152-HDR--before-square.webp">
+                  <img src="./src/assets/BEZ08152-HDR-square.webp" class="object-cover object-center min-h-full h-full w-full" alt="Image 2" loading="eager" fetchpriority="high" data-scale-scroll data-scale-min="0.8" data-scale-max="1.25"/>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        <div class="absolute left-32 bottom-10">
+        <div class="absolute left-32 bottom-10 pointer-events-none z-30">
           <div class="title text-[clamp(3rem,17vw-1.3rem,16rem)] leading-none" data-scroll="3" data-scroll-lerp="0.25">balbek</div>
         </div>
       </section>
