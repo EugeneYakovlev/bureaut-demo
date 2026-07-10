@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import { gsap } from 'gsap'
+import displacementUrl from '../../assets/displacement2.jpg?url'
 
 const vertexShader = `
   varying vec2 vUv;
@@ -36,7 +37,7 @@ const fragmentShader = `
 let sharedDisplacementTexture = null
 function getDisplacementTexture(loader) {
   if (!sharedDisplacementTexture) {
-    sharedDisplacementTexture = loader.load('./src/assets/displacement2.jpg')
+    sharedDisplacementTexture = loader.load(displacementUrl)
     sharedDisplacementTexture.wrapS = THREE.RepeatWrapping
     sharedDisplacementTexture.wrapT = THREE.RepeatWrapping
   }
@@ -67,12 +68,9 @@ export function initHoverDistortion(selector = '[data-hover-distort]') {
   const displacementTexture = getDisplacementTexture(textureLoader)
 
   const items = elements.map((el) => {
-    const img = el.querySelector('img')
-    // Read the literal src attribute, not the currentSrc/src properties —
-    // for loading="lazy" images those can report empty until the browser
-    // decides to start loading them, and browsers differ on timing for that.
+    const img = el.querySelector('img:not([data-hover-to])')
     const fromUrl = img.getAttribute('src')
-    const toUrl = el.dataset.hoverTo
+    const toUrl = el.querySelector('[data-hover-to]').getAttribute('src')
     const strength = parseFloat(el.dataset.hoverStrength ?? 0.55)
     const lerp = parseFloat(el.dataset.hoverLerp ?? 0.05)
 
