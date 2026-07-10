@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #fff;
+  --border: #e5e4e7;
+
+  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --mono: ui-monospace, Consolas, monospace;
+
+  font: 18px/145% var(--sans);
+  letter-spacing: 0.18px;
+  color: var(--text);
+  background: var(--bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  @media (max-width: 1024px) {
+    font-size: 16px;
+  }
+}
+
+body {
+  @apply m-0 p-0 bg-gray-200;
+}
+
+section {
+  @apply relative;
+}
+
+[data-scale-scroll], [data-scroll] {
+  will-change: transform;
+}
