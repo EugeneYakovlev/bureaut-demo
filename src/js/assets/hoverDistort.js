@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import { gsap } from 'gsap'
-import displacementUrl from '../../assets/displacement2.jpg?url'
+import displacementUrl from '../../assets/displacement8.jpg'
 
 const vertexShader = `
   varying vec2 vUv;
@@ -16,9 +16,15 @@ const fragmentShader = `
   uniform sampler2D uDisplacement;
   uniform float uProgress;
   uniform float uStrength;
+  uniform vec2 uClipMin;
+  uniform vec2 uClipMax;
   varying vec2 vUv;
 
   void main() {
+    if (gl_FragCoord.x < uClipMin.x || gl_FragCoord.x > uClipMax.x || gl_FragCoord.y < uClipMin.y || gl_FragCoord.y > uClipMax.y) {
+      discard;
+    }
+
     vec2 uv = vUv;
 
     vec4 disp = texture2D(uDisplacement, uv);
@@ -80,6 +86,8 @@ export function initHoverDistortion(selector = '[data-hover-distort]') {
       uDisplacement: { value: displacementTexture },
       uProgress: { value: 0 },
       uStrength: { value: strength },
+      uClipMin: { value: new THREE.Vector2(0, 0) },
+      uClipMax: { value: new THREE.Vector2(0, 0) },
     }
 
     const material = new THREE.ShaderMaterial({ uniforms, vertexShader, fragmentShader, transparent: true })
@@ -96,9 +104,12 @@ export function initHoverDistortion(selector = '[data-hover-distort]') {
       }
     }
 
+    const maxAnisotropy = renderer.capabilities.getMaxAnisotropy()
+
     textureLoader.load(
       fromUrl,
       (texture) => {
+        texture.anisotropy = maxAnisotropy
         uniforms.uFrom.value = texture
         onTextureLoaded()
       },
@@ -108,6 +119,7 @@ export function initHoverDistortion(selector = '[data-hover-distort]') {
     textureLoader.load(
       toUrl,
       (texture) => {
+        texture.anisotropy = maxAnisotropy
         uniforms.uTo.value = texture
         onTextureLoaded()
       },
@@ -122,21 +134,6 @@ export function initHoverDistortion(selector = '[data-hover-distort]') {
     el.addEventListener('pointerleave', () => {
       state.target = 0
     })
-
-    mesh.onBeforeRender = (rendererArg) => {
-      const clipRect = el.getBoundingClientRect()
-      const pixelRatio = rendererArg.getPixelRatio()
-      rendererArg.setScissorTest(true)
-      rendererArg.setScissor(
-        clipRect.left * pixelRatio,
-        (window.innerHeight - clipRect.bottom) * pixelRatio,
-        clipRect.width * pixelRatio,
-        clipRect.height * pixelRatio
-      )
-    }
-    mesh.onAfterRender = (rendererArg) => {
-      rendererArg.setScissorTest(false)
-    }
 
     return { el, img, mesh, uniforms, state }
   })
@@ -154,11 +151,16 @@ export function initHoverDistortion(selector = '[data-hover-distort]') {
 
   function updatePositions() {
     const height = window.innerHeight
-    for (const { img, mesh } of items) {
+    const pixelRatio = renderer.getPixelRatio()
+    const canvasHeight = renderer.domElement.height
+    for (const { el, img, mesh, uniforms } of items) {
       const rect = img.getBoundingClientRect()
-      
       mesh.position.set(rect.left + rect.width / 2, height - (rect.top + rect.height / 2), 0)
       mesh.scale.set(rect.width, rect.height, 1)
+
+      const clipRect = el.getBoundingClientRect()
+      uniforms.uClipMin.value.set(clipRect.left * pixelRatio, canvasHeight - clipRect.bottom * pixelRatio)
+      uniforms.uClipMax.value.set(clipRect.right * pixelRatio, canvasHeight - clipRect.top * pixelRatio)
     }
   }
 
