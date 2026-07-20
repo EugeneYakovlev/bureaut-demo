@@ -78,7 +78,8 @@ export function initHoverDistortion(selector = '[data-hover-distort]') {
     const fromUrl = img.getAttribute('src')
     const toUrl = el.querySelector('[data-hover-to]').getAttribute('src')
     const strength = parseFloat(el.dataset.hoverStrength ?? 0.55)
-    const lerp = parseFloat(el.dataset.hoverLerp ?? 0.05)
+    const lerp = parseFloat(el.dataset.hoverLerp ?? 0.15)
+    const dampLambda = -Math.log(1 - lerp) * 60
 
     const uniforms = {
       uFrom: { value: null },
@@ -127,7 +128,7 @@ export function initHoverDistortion(selector = '[data-hover-distort]') {
       (error) => console.error(`hoverDistort: failed to load "to" texture ${toUrl}`, error)
     )
 
-    const state = { target: 0, lerp }
+    const state = { target: 0, dampLambda }
     el.addEventListener('pointerenter', () => {
       state.target = 1
     })
@@ -167,10 +168,11 @@ export function initHoverDistortion(selector = '[data-hover-distort]') {
   window.addEventListener('resize', resize)
   resize()
 
-  gsap.ticker.add(() => {
+  gsap.ticker.add((time, deltaTimeMs) => {
     updatePositions()
+    const dt = deltaTimeMs / 1000
     for (const { uniforms, state } of items) {
-      uniforms.uProgress.value = THREE.MathUtils.lerp(uniforms.uProgress.value, state.target, state.lerp)
+      uniforms.uProgress.value = THREE.MathUtils.damp(uniforms.uProgress.value, state.target, state.dampLambda, dt)
     }
     renderer.render(scene, camera)
   })
