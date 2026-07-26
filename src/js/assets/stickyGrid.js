@@ -140,7 +140,7 @@ class StickyGridScroll {
     
     timeline.to(columns[1], {
       yPercent: (index) => (index < Math.floor(columns[1].length / 2) ? -1 : 1) * 40,
-      duration: 0.5,
+      duration: 0.75,
       ease: "power1.inOut"
     }, "-=0.5")
     
