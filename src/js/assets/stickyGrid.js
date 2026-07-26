@@ -68,7 +68,7 @@ class StickyGridScroll {
     
     timeline
       .add(this.gridRevealTimeline())
-      .add(this.gridZoomTimeline(), "-=0.6")
+      .add(this.gridZoomTimeline(), "-=0.3")
       .add(() => this.toggleContent(timeline.scrollTrigger.direction === 1), "-=0.2")
       .add(this.gridHideTimeline())
   }
