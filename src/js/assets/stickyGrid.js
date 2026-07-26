@@ -1,4 +1,5 @@
 import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 class StickyGridScroll {
   constructor() {
@@ -7,6 +8,7 @@ class StickyGridScroll {
     this.initContent()
     this.groupItemsByColumn()
 
+    this.pinSection()
     this.addParallaxOnScroll()
     this.animateTitleOnScroll()
     this.animateGridOnScroll()
@@ -46,6 +48,20 @@ class StickyGridScroll {
     } 
   }
 
+  pinSection() {
+    if (!this.section || !this.wrapper) {
+      return
+    }
+
+    ScrollTrigger.create({
+      trigger: this.section,
+      start: "top top",
+      end: "bottom bottom",
+      pin: this.wrapper,
+      pinSpacing: false,
+    })
+  }
+
   groupItemsByColumn() {
     this.numColumns = 3
 
@@ -61,7 +77,7 @@ class StickyGridScroll {
       scrollTrigger: {
         trigger: this.section,
         start: "top 25%", 
-        end: "bottom 50%",
+        end: "bottom bottom",
         scrub: true
       },
     })

@@ -18,7 +18,10 @@ window.scrollTo(0, 0)
 document.addEventListener('DOMContentLoaded', () => {
   gsap.registerPlugin(ScrollTrigger)
 
-  const lenis = new Lenis()
+  const lenis = new Lenis({
+    lerp: 0.08,
+    wheelMultiplier: 1.4
+  })
 
   lenis.on('scroll', ScrollTrigger.update)
 

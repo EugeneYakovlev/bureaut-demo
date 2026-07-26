@@ -33,3 +33,7 @@ section {
 [data-scale-scroll], [data-scroll], .gallery__item, .gallery, .gallery__grid, .content__title, .content_description {
   will-change: transform;
 }
+
+.section__wrapper {
+  z-index: 50;
+}
