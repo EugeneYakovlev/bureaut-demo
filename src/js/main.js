@@ -8,6 +8,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { initScaleOnScroll } from './assets/scale.js'
 import { initParallaxOnScroll } from './assets/parallax.js'
 import { initHoverDistortion } from './assets/hoverDistort.js'
+import StickyGridScroll from './assets/stickyGrid.js'
 
 if ('scrollRestoration' in history) {
   history.scrollRestoration = 'manual'
@@ -30,4 +31,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initScaleOnScroll()
   initParallaxOnScroll()
   initHoverDistortion()
+  
+  new StickyGridScroll()
 })
