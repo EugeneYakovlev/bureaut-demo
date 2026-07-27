@@ -77,7 +77,7 @@ class StickyGridScroll {
       scrollTrigger: {
         trigger: this.section,
         start: "top 25%", 
-        end: "bottom bottom",
+        end: "bottom top",
         scrub: true
       },
     })
@@ -100,13 +100,18 @@ class StickyGridScroll {
       const fromTop = colIndex % 2 === 0
       
       timeline.from(column, {
-      y: dy * (fromTop ? 1 : -1), 
-      stagger: {
-          each: 0.06,
-          from: fromTop ? "start" : "end", 
-      },
-      ease: "power1.inOut",
+        y: dy * (fromTop ? 1 : -1), 
+        stagger: {
+            each: 0.06,
+            from: fromTop ? "start" : "end", 
+        },
+        ease: "power1.inOut",
       }, "grid-reveal") 
+
+      timeline.eventCallback("onUpdate", () => {
+        const isPastThreshold = timeline.progress() >= 0.5
+        this.content.style.zIndex = isPastThreshold ? 10 : -10
+      })
     })
     
     return timeline
